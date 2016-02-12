@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Interactive</title>
+    <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+    <script src="../chewie/chewie.js"></script>
+    <style>
+      #myCanvas{background-color: pink; margin: 0 auto; display: block;}
+      body{background-color: black;}
+      body{margin: 0 auto;}
+    </style>
+    <script>
+
+    window.addEventListener("load", interactive);
+
+  function interactive(){
+
+      var stage = new createjs.Stage("myCanvas");
+
+      var stageW = stage.canvas.width;
+    	var stageH = stage.canvas.height;
+      stage.enableMouseOver(10);
+
+      var text =  new createjs.Text("MOVING SQUARE", "60px Impact", "white");
+      text.x = stageW/2;
+      text.y = 80;
+      text.textAlign = "center";
+    	text.textBaseline = "middle";
+      text.shadow = new createjs.Shadow("black", 1, 1, 3);
+      stage.addChild(text);
+
+
+
+      var buttons = new createjs.Container();
+      stage.addChild(buttons);
+
+      buttons.y = 100
+
+      var spinButton = new chewie.Button(150,50,null, null,"SPIN","30px Impact",null,10);
+      buttons.addChild(spinButton);
+
+      spinButton.x = stageW/2;
+      spinButton.y = stageH/2;
+
+      var backgroundButton = new chewie.Button(150,50,"red", null,"BACKGROUND","22px Impact",null,10);
+      buttons.addChild(backgroundButton);
+
+      backgroundButton.x = stageW/2-100;
+      backgroundButton.y = stageH/2+100;
+
+      var bounceButton = new chewie.Button(150,50,null, null,"BOUNCE","30px Impact",null,10);
+      buttons.addChild(bounceButton);
+
+      bounceButton.x = stageW/2-200;
+      bounceButton.y = stageH/2;
+
+      var slideButton = new chewie.Button(150,50,null, null,"SLIDE","30px Impact",null,10);
+      buttons.addChild(slideButton);
+
+      slideButton.x = stageW/2+200;
+      slideButton.y = stageH/2;
+
+      var reset = new chewie.Button(150,50,"red", null,"RESET","22px Impact",null,10);
+      buttons.addChild(reset);
+
+      reset.x = stageW/2+100;
+      reset.y = stageH/2+100;
+
+      reset.on("click", function(){
+
+        stage.removeAllChildren(interactive);
+        interactive();
+      });
+
+
+      var rectangle = new chewie.Rect(120,120,"purple","black",5);
+      stage.addChild(rectangle);
+
+      rectangle.x = stageW/2;
+      rectangle.y = stageH/2-100;
+
+      createjs.Ticker.on("tick", stage);
+	    createjs.Ticker.framerate = 60;
+
+      spinButton.on("click", function(){
+      createjs.Tween.get(rectangle,{loop:true}).to({rotation:360}, 1000, createjs.Ease.elasticOut)
+    });
+
+    bounceButton.on("click", function(){
+    createjs.Tween.get(rectangle,{loop:true}).to({y:stageH/2-180}, 300, createjs.Ease.liner)
+    .to({y:stageH/2-50}, 300, createjs.Ease.linear);
+  });
+
+    slideButton.on("click", function(){
+    createjs.Tween.get(rectangle, {loop:true}).to({x:stageW/2-150}, 500, createjs.Ease.liner)
+    .to({x:stageW/2+150}, 500, createjs.Ease.linear)
+    .to({x:stageW/2-150}, 500, createjs.Ease.liner)
+    .to({x:stageW/2+150}, 500, createjs.Ease.linear)
+    .to({x:stageW/2}, 500, createjs.Ease.linear);
+  });
+
+    backgroundButton.on("click",changeColor);
+
+      var background = "pink";
+
+      var color = document.querySelector("#myCanvas");
+
+     function changeColor(ev){
+
+      switch(background) {
+        case (background = "pink"):
+        color.style.background="lightskyblue";
+        background = "lightskyblue";
+        break;
+
+        case (background = "lightskyblue" ):
+        color.style.background ="tomato";
+        background = "tomato";
+        break;
+
+        case (background = "tomato" ):
+        color.style.background="grey";
+        background = "grey";
+        break;
+
+        case (background = "grey" ):
+        color.style.background="pink";
+        background = "pink";
+        break;
+
+      }
+    }
+
+      stage.update();
+
+      }
+    </script>
+  </head>
+    <body>
+      <canvas id="myCanvas" width="960" height="720"></canvas>
+    </body
+</html>
